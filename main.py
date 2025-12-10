@@ -4,7 +4,7 @@ import numpy as np
 
 conn = st.connection("mydatabase", type="sql")
 
-quer = conn.query("SELECT* FROM mytable")
+quer = conn.query("SELECT* FROM mytable where ")
 
 st.write(quer)
 st.write("hello worl")
