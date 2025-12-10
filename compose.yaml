@@ -10,12 +10,12 @@ services:
       DB_HOST: db
       DB_USER: root
       DB_PASSWORD: root
-      DB_NAME: mydatabase
+      DB_NAME: gestion_db
     ports:
       - "8501:8501"
     volumes:
       - .:/app
-    command: streamlit run main.py --server.port=8501 --server.headless=true
+    command: streamlit run main.py --server.port=8501 --server.address 0.0.0.0 --server.headless=true
 
   db:
     image: mysql:latest
@@ -28,7 +28,6 @@ services:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # optional
 
 volumes:
   mysql_data:
