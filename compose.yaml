@@ -15,7 +15,7 @@ services:
       - "8501:8501"
     volumes:
       - .:/app
-    command: streamlit run main.py --server.port=8501 --server.headless=true
+    command: streamlit run accueil.py --server.port=8501 --server.headless=true
 
   db:
     image: mysql:latest
