@@ -8,15 +8,151 @@ from connectionDB import *
 from headEdite import *
 headerEdit()
 import base64
-
+st.set_page_config(page_title = "Welcome To our reservation web site")
 def img_to_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
+def heroSection(imageUrl,title,undertitle):
+    st.html("""
+    <style>
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      color: white;
+    }
+    
+    .glass-card h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .glass-card p {
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+    }
+    
+    .glass-card button {
+      padding: 12px 25px;
+      border: none;
+      background: rgba(255, 255, 255, 0.3);
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    
+    .glass-card button:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+    
+    .more-section {
+      padding: 60px 20px;
+      text-align: center;
+      background: white;
+      color: #333;
+    }
+    </style>
+        """)
+    st.html(f"""
+        <section class="hero" style="height: 90vh;
+        border-radius: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('data:image/png;base64,{imageUrl}');
+      background-size: cover;
+      background-position: center;
+      position: relative;">
+          <div class="glass-card">
+            <h1>{title}</h1>
+            <p>{undertitle}</p>
+          </div>
+        </section>
 
-st.set_page_config(page_title = "Welcome To our reservation web site")
-st.title("This is the Home Page.")
-st.sidebar.success("Select Any Page from here")
+    """)
+
+with st.container():
+    heroSection(img_to_base64("assets/bg.jpg"),"hello","h")
+
+st.space(size="medium")
+
+
+st.subheader("Notre hotels")
+st.space(size="small")
+
+
+def stasCard(nbr,title,icon):
+    st.html("""
+        <style>
+            .stat-card {
+              background-color: #d6eaff;
+              flex: 1;
+              min-width: 180px;
+              max-width: 220px;
+              background-color: #eee;
+              border-radius: 15px;
+              padding: 20px;
+              text-align: center;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            }
+            
+            .icon {
+              background-color: rgba(0, 102, 204, 0.15);
+              color: #004c99;
+              font-size: 24px;
+              width: 40px;
+              height: 40px;
+              margin: 0 auto 10px;
+              line-height: 40px;
+              border-radius: 50%;
+              background-color: rgba(0, 0, 0, 0.08);
+            }
+            
+            .value {
+              font-size: 22px;
+              font-weight: bold;
+              margin-bottom: 5px;
+              color: #002d66;
+            }
+            
+            .label {
+              font-size: 13px;
+              color: #555;
+            }
+
+        </style>
+    """)
+    st.html(f"""
+      <div class="stat-card">
+        <div class="icon">{icon}</div>
+        <div class="value">{nbr}</div>
+        <div class="label">{title}</div>
+      </div>
+""")
+col1,col2,col3 = st.columns(3)
+nbrAgance = conn.query("SELECT count(*) as nrbAgance FROM AGENCE_DE_VOYAGE")["nrbAgance"][0]
+nbrVille = conn.query("SELECT count(*) as nbrVille FROM VILLE")["nbrVille"]
+nbrResevation = conn.query("SELECT count(*) as nbrResevation FROM RESERVATION")["nbrResevation"][0]
+with col1:
+    stasCard(nbrAgance, "nombres des agence", "🏢")
+with col2:
+    stasCard(nbrAgance, "nombres des agence", "🏢")
+with col3:
+    stasCard(nbrAgance, "nombres des agence", "🏢")
+st.space(size="medium")
+st.subheader("Notre team")
+st.space(size="small")
 def profilCard(ftname,lname,imageUrl,role):
     st.html("""
     <style>
