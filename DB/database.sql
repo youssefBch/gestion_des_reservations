@@ -1,4 +1,4 @@
-CREATE DATABASE gestion_db
+CREATE DATABASE gestion_db;
 CREATE TABLE VILLE (
     nom_ville VARCHAR(200) NOT NULL,
     longi REAL NOT NULL,
