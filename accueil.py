@@ -144,9 +144,9 @@ def stasCard(nbr,title,icon):
       </div>
 """)
 col1,col2,col3 = st.columns(3)
-nbrAgance = conn.query("SELECT count(*) as nrbAgance FROM AGENCE_DE_VOYAGE")["nrbAgance"][0]
-nbrVille = conn.query("SELECT count(*) as nbrVille FROM VILLE")["nbrVille"][0]
-nbrResevation = conn.query("SELECT count(*) as nbrResevation FROM RESERVATION")["nbrResevation"][0]
+nbrAgance = conn.query("SELECT count(*) as nrbAgance FROM TRAVEL_AGENCY")["nrbAgance"][0]
+nbrVille = conn.query("SELECT count(*) as nbrVille FROM CITY")["nbrVille"][0]
+nbrResevation = conn.query("SELECT count(*) as nbrResevation FROM BOOKING")["nbrResevation"][0]
 with col1:
     stasCard(nbrAgance, "nombres des agence", "🏢")
 with col2:
