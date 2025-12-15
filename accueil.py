@@ -13,77 +13,80 @@ def img_to_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-def heroSection(imageUrl,title,undertitle):
-    st.html("""
+def heroSection(*args):
+    import streamlit.components.v1 as components
+
+    html_code = f"""
     <style>
-    
-    .glass-card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 40px;
-      max-width: 500px;
-      width: 90%;
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      text-align: center;
-      color: white;
-    }
-    
-    .glass-card h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-    }
-    
-    .glass-card p {
-      font-size: 1.1rem;
-      margin-bottom: 30px;
-    }
-    
-    .glass-card button {
-      padding: 12px 25px;
-      border: none;
-      background: rgba(255, 255, 255, 0.3);
-      color: white;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    
-    .glass-card button:hover {
-      background: rgba(255, 255, 255, 0.5);
-    }
-    
-    .more-section {
-      padding: 60px 20px;
-      text-align: center;
-      background: white;
-      color: #333;
-    }
+    * {{box-sizing: border-box;}}
+    body {{font-family: Verdana, sans-serif;}}
+    .mySlides {{display: none;}}
+    img {{vertical-align: middle;}}
+
+    .slideshow-container {{
+      max-width: 1000px;
+      position: relative;
+      margin: auto;
+      border-radius: 10px
+    }}
+
+    .dot {{
+      height: 15px;
+      width: 15px;
+      margin: 0 2px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+    }}
+
+    .active {{
+      background-color: #717171;
+    }}
     </style>
-        """)
-    st.html(f"""
-        <section class="hero" style="height: 90vh;
-        border-radius: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-image: url('data:image/png;base64,{imageUrl}');
-      background-size: cover;
-      background-position: center;
-      position: relative;">
-          <div class="glass-card">
-            <h1>{title}</h1>
-            <p>{undertitle}</p>
-          </div>
-        </section>
 
-    """)
+    <div class="slideshow-container">
+      <img class="mySlides" src="data:image/png;base64,{img_to_base64(args[0])}" style="width:100%">
+      <img class="mySlides" src="data:image/png;base64,{img_to_base64(args[1])}" style="width:100%">
+      <img class="mySlides" src="data:image/png;base64,{img_to_base64(args[2])}" style="width:100%">
+    </div>
 
-with st.container():
-    heroSection(img_to_base64("assets/bg.jpg"),"hello","h")
+    <div style="text-align:center">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+
+    <script>
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {{
+      let slides = document.getElementsByClassName("mySlides");
+      let dots = document.getElementsByClassName("dot");
+
+      for (let i = 0; i < slides.length; i++) {{
+        slides[i].style.display = "none";
+      }}
+
+      slideIndex++;
+      if (slideIndex > slides.length) {{slideIndex = 1}}
+
+      for (let i = 0; i < dots.length; i++) {{
+        dots[i].className = dots[i].className.replace(" active", "");
+      }}
+
+      slides[slideIndex - 1].style.display = "block";
+      dots[slideIndex - 1].className += " active";
+
+      setTimeout(showSlides, 2000);
+    }}
+    </script>
+    """
+
+    components.html(html_code, height=600)
+
+
+heroSection("assets/bg1.jpg", "assets/bg2.jpg", "assets/bg3.jpg")
 
 st.space(size="medium")
 
@@ -142,7 +145,7 @@ def stasCard(nbr,title,icon):
 """)
 col1,col2,col3 = st.columns(3)
 nbrAgance = conn.query("SELECT count(*) as nrbAgance FROM AGENCE_DE_VOYAGE")["nrbAgance"][0]
-nbrVille = conn.query("SELECT count(*) as nbrVille FROM VILLE")["nbrVille"]
+nbrVille = conn.query("SELECT count(*) as nbrVille FROM VILLE")["nbrVille"][0]
 nbrResevation = conn.query("SELECT count(*) as nbrResevation FROM RESERVATION")["nbrResevation"][0]
 with col1:
     stasCard(nbrAgance, "nombres des agence", "🏢")
@@ -242,22 +245,12 @@ def profilCard(ftname,lname,imageUrl,role):
     """)
 col1,col2,col3 = st.columns(3)
 with col1:
-    profilCard("youssef","bouchti",img_to_base64("assets/5.png"),"tester")
+    profilCard("Youssef","Bouchti",img_to_base64("assets/5.png"),"tester")
 with col2:
-    profilCard("youssef","bouchti",img_to_base64("assets/5.png"),"tester")
+    profilCard("Amine","El Asri",img_to_base64("assets/5.png"),"tester")
 with col3:
     profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
 
 
-def map():
-    logiLatitTable = conn.query("SELECT longi,lati FROM VILLE")
-    df = pd.DataFrame(logiLatitTable)
-    st.write(df)
-    col1,col2,col3 = st.columns(3)
-    for index,row in df.iterrows():
-        m = folium.Map(location=[row["lati"],row["longi"]], zoom_start=16)
-        folium.Marker([row["lati"],row["longi"]], popup="Liberty Bell", tooltip="Liberty Bell").add_to(m)
 
-         # call to render Folium map in Streamlit
-        st_data = st_folium(m, width=725)
 

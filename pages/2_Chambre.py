@@ -1,12 +1,14 @@
 import streamlit as st
 import pandas as pd
 from connectionDB import *
+import streamlit.components.v1 as components
+import base64
 
 st.header("Page Chambres")
+def img_to_base64(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
 
-# ==============================
-# DONNÉES (SANS FICHIER EXTERNE)
-# ==============================
 df_chambre = conn.query("""
 SELECT *
 FROM CHAMBRE c
@@ -87,17 +89,65 @@ st.dataframe(
     use_container_width=True
 )
 
-# ==============================
-# AFFICHAGE MAX 5 (FACULTATIF)
-# ==============================
-st.subheader("Détails des chambres (max 5)")
 
-df_limite = df_filtre.head(5)
+def cardChambre(code_c, surface, type_chambre):
+    st.html("""
+    <style>
+        .property-card{
+          width:360px;
+          border-radius:16px;
+          overflow:hidden;
+          box-shadow: 0 10px 30px rgba(20,30,70,0.08);
+          transition:transform .25s ease, box-shadow .25s ease;
+        }
+        .property-card:hover{
+          transform:translateY(-8px);
+          box-shadow: 0 20px 50px rgba(20,30,70,0.12);
+        }
+        
+        .card-body{
+          padding:18px;
+        }
+        .card-body .title{
+              margin: 0 0 8px 0;
+            font-size: 18px;
+            color: #f4f4f4 !important;
+        }
 
-for index, row in df_limite.iterrows():
-    st.write(f"""
-    Code : {row['code_c']}    
-    Superficie : {row['surface']} m²  
-    Type : {row['type_chambre']}
+        .meta {
+            display: flex;
+            gap: 16px;
+            color: var(--muted);
+            font-size: 13px;
+            margin-bottom: 14px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            list-style: none;
+        }
+    </style>
     """)
-    st.divider()
+    st.html(f"""
+        <div>
+        <div class="property-card">
+          <div class="card-body">
+            <img class="mySlides" src="data:image/png;base64,{img_to_base64("assets/bg1.jpg")}" style="width:100%">
+            <h3 class="title">Code chambre {code_c}</h3>
+            <ul class="meta">
+              <li>Surface : {surface}</li>
+              <li>Type de chambre : {type_chambre}</li>
+            </div>
+          </div>
+        </div>
+    """)
+
+
+cols = st.columns(2)
+i = 0
+for index, row in df_filtre.iterrows():
+    with cols[i]:
+        cardChambre(row["code_c"], row["surface"], row["type_chambre"])
+    if i == 1:
+        i = 0
+    else:
+        i = i + 1
