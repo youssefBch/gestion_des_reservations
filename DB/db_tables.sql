@@ -1,95 +1,133 @@
-/* =========================
-   VILLE
-========================= */
-INSERT INTO VILLE (nom_ville, longi, lati, region, pays) VALUES
-('Rabat', -6.8498, 34.0209, 'Rabat-Salé-Kénitra', 'Maroc'),
-('Kénitra', -6.5802, 34.2610, 'Rabat-Salé-Kénitra', 'Maroc'),
-('Casablanca', -7.5898, 33.5731, 'Casablanca-Settat', 'Maroc'),
-('Marrakech', -7.9811, 31.6295, 'Marrakech-Safi', 'Maroc'),
-('Fès', -5.0078, 34.0331, 'Fès-Meknès', 'Maroc'),
-('Paris', 2.3522, 48.8566, 'Île-de-France', 'France'),
-('Lyon', 4.8357, 45.7640, 'Auvergne-Rhône-Alpes', 'France'),
-('Marseille', 5.3698, 43.2965, 'PACA', 'France'),
-('Nice', 7.2619, 43.7102, 'PACA', 'France');
+--
+-- Dump des donnees pour la table `CITY`
+--
 
-/* =========================
-   CHAMBRE (BEAUCOUP)
-========================= */
-INSERT INTO CHAMBRE (code_c, surface) VALUES
-(101,18),(102,20),(103,22),(104,24),(105,26),
-(106,28),(107,30),(108,32),(109,34),(110,36),
-(201,38),(202,40),(203,42),(204,45),(205,48),
-(206,50),(207,55),(208,60),(209,65),(210,70),
-(301,16),(302,17),(303,18),(304,19),(305,20),
-(306,21),(307,22),(308,23),(309,24),(310,25),
-(401,26),(402,27),(403,28),(404,29),(405,30),
-(406,31),(407,32),(408,33),(409,34),(410,35),
-(501,36),(502,38),(503,40),(504,42),(505,44),
-(506,46),(507,48),(508,50),(509,55),(510,60);
+INSERT INTO `CITY` (`Name`, `Latitude`, `Longitude`, `Country`, `Region`) VALUES
+('Ville1', 41.1253, 16.8667, 'Maroc', 'Region-3'),
+(' Ville 2', 44.4939, 11.3428, 'Maroc', 'Region-2'),
+(' Ville 3', 45.5389, 10.2203, 'Maroc', 'Region1'),
+(' Ville 4', 37.5, 15.0903, 'Maroc', 'Region-4'),
+(' Ville 5', 39.3, 16.25, 'Maroc', 'Region-5'),
+(' Ville 6', 43.7714, 11.2542, 'Maroc', 'Region-6'),
+(' Ville 7', 44.4111, 8.9328, 'Maroc', 'Region-7'),
+(' Ville 8', 38.1936, 15.5542, 'Maroc', 'Region-4'),
+('Ville 9', 45.4669, 9.19, 'Maroc', 'Region1'),
+(' Ville 10', 44.6458, 10.9257, 'Maroc', 'Region-2'),
+(' Ville 11', 40.8333, 14.25, 'Maroc', 'Region-9'),
+(' Ville 12', 45.4064, 11.8778, 'Maroc', 'Region-10'),
+(' Ville 13', 38.1157, 13.3613, 'Maroc', 'Region-4'),
+(' Ville 14', 44.8015, 10.328, 'Maroc', 'Region-2'),
+(' Ville 15', 43.8808, 11.0966, 'Maroc', 'Region-6'),
+(' Ville 16', 41.8931, 12.4828, 'Maroc', 'Region-11'),
+(' Ville 17', 40.4711, 17.2431, 'Maroc', 'Region-3'),
+(' Ville 18', 45.0792, 7.6761, 'Maroc', 'Region-12'),
+(' Ville 19', 45.6503, 13.7703, 'Maroc', Region-13),
+(' Ville 20', 45.4397, 12.3319, 'Maroc', 'Region-10'),
+(' Ville 21', 45.4386, 10.9928, 'Maroc', 'Region-10');
 
-/* =========================
-   AGENCE_DE_VOYAGE
-========================= */
-INSERT INTO AGENCE_DE_VOYAGE
-(code_a, site_web, telephone,
- Adresse_code_postal, Adresse_rue_a, Adresse_num_a, Adresse_pays_a,
- VILLE_nom_ville)
-VALUES
-(1,'https://rabat-voyage.ma','+212537000001',10000,'Av Mohammed V',10,'Maroc','Rabat'),
-(2,'https://kenitra-trip.ma','+212537000002',14000,'Rue Hassan II',6,'Maroc','Kénitra'),
-(3,'https://casa-travel.ma','+212522000003',20000,'Bd Zerktouni',22,'Maroc','Casablanca'),
-(4,'https://marrakech-tour.ma','+212524000004',40000,'Route Ourika',8,'Maroc','Marrakech'),
-(5,'https://fes-voyage.ma','+212535000005',30000,'Rue Fes Jdid',4,'Maroc','Fès'),
-(6,'https://paris-holiday.fr','+33145000006',75001,'Rue Rivoli',15,'France','Paris'),
-(7,'https://lyon-voyage.fr','+33472000007',69000,'Rue Lyon',20,'France','Lyon'),
-(8,'https://marseille-trip.fr','+33491000008',13000,'Vieux Port',5,'France','Marseille'),
-(9,'https://nice-tour.fr','+33493000009',6000,'Promenade Anglais',3,'France','Nice');
 
-/* =========================
-   SUITE
-========================= */
-INSERT INTO SUITE (CHAMBRE_code_c) VALUES
-(203),(204),(205),(206),(207),(208),(209),(210),
-(503),(504),(505),(506),(507),(508),(509),(510);
 
-/* =========================
-   HAS_EQUIPEMENT
-========================= */
-INSERT INTO HAS_EQUIPEMENT (CHAMBRE_code_c, EQUIPEMENT_equipement) VALUES
-(101,'WiFi'),(101,'Climatisation'),
-(103,'Télévision'),
-(105,'Balcon'),
-(203,'Jacuzzi'),
-(205,'Vue sur mer'),
-(207,'Piscine privée'),
-(210,'Terrasse'),
-(503,'Cuisine'),
-(510,'Jacuzzi');
+--
+-- Dump des donnees pour la table`TRAVEL_AGENCY`
+--
 
-/* =========================
-   HAS_ESPACE_DISPO
-========================= */
-INSERT INTO HAS_ESPACE_DISPO (ESPACE_DISPO_espace_dispo, SUITE_CHAMBRE_code_c) VALUES
-('Salon privé',203),
-('Terrasse',204),
-('Piscine',205),
-('Jardin',207),
-('Rooftop',210),
-('Salle à manger',503);
+INSERT INTO `TRAVEL_AGENCY` (`CodA`, `WebSite`, `Tel`, `Street_Address`, `ZIP_Address`, `City_Address`, `Num_Address`, `Country_Address`) VALUES
+(1, 'www.ag1.ma', '060-123456', 'Rue- Stre', 1234, 'Ville1', 12, 'Maroc'),
+(2, 'www.ag2.ma', '060-234567', 'Rue- Cora', 2345, ' Ville 2', 24, 'Maroc'),
+(3, NULL, '060-345678', 'Rue- Lun', 3456, ' Ville 3', 38, 'Maroc'),
+(4, 'www.ag4.ma', '050-23232', 'Rue- Lend', 2345, ' Ville 2', 11, 'Maroc'),
+(5, 'www.ag5.ma', '060-89821', 'Rue- Rim', 1234, ' Ville 1', 5, 'Maroc'),
+(6, 'www.ag6.ma', '060-77623', 'Rue- Cavr', 1234, ' Ville 1', 89, 'Maroc'),
+(7, 'www.ag7.ma', '060-14521', 'Rue- Mart', 1234, ' Ville 1', 43, 'Maroc'),
+(8, 'www.ag8.ma', '060-22121', 'Rue- UFoscol', 7777, ' Ville 4', 130, 'Maroc'),
+(9, 'www.ag9.ma', '060-34012', 'Rue- Milop', 8989, ' Ville 5', 77, 'Maroc'),
+(10, 'www.ag10.ma', '060-99881', 'Rue- Trent', 8989, ' Ville 5', 10, 'Maroc'),
+(11, 'www.ag11.ma', '060-01001', 'Rue- Liat', 9876, ' Ville 6', 10, 'Maroc')
+;
 
-/* =========================
-   RESERVATION
-========================= */
-INSERT INTO RESERVATION
-(CHAMBRE_code_c, data_d, data_f, prix, AGENCE_DE_VOYAGE_code_a)
-VALUES
-(101,'2025-06-01','2025-06-05',400,1),
-(102,'2025-06-10','2025-06-15',550,2),
-(103,'2025-07-01','2025-07-07',700,3),
-(104,'2025-07-10','2025-07-18',850,4),
-(105,'2025-08-01','2025-08-10',1000,5),
-(201,'2025-06-05','2025-06-12',1300,6),
-(202,'2025-07-01','2025-07-10',1600,7),
-(203,'2025-08-01','2025-08-15',2200,8),
-(205,'2025-09-01','2025-09-20',3000,9),
-(210,'2025-10-01','2025-10-25',4200,6);
+--
+-- Dump des donnees pour la table `ROOM`
+--
+
+INSERT INTO `ROOM` (`CodR`, `Floor`, `SurfaceArea`, `Type`) VALUES
+(1, 1, 20, 'single'),
+(2, 2, 30, 'double'),
+(3, 3, 40, 'suite'),
+(4, 2, 20, 'single'),
+(5, 4, 17, 'single'),
+(6, 5, 25, 'double'),
+(7, 4, 25, 'double'),
+(8, 2, 45, 'suite'),
+(9, 6, 45, 'suite'),
+(10, 2, 35, 'suite'),
+(11, 4, 15, 'single'),
+(12, 8, 25, 'single'),
+(13, 3, 30, 'double');
+
+
+--
+-- Dump des donnees pour la table`HAS_AMENITIES`
+--
+
+INSERT INTO `HAS_AMENITIES` (`AMENITIES_Amenity`, `ROOM_CodR`) VALUES
+('balcony', 1),
+('balcony', 2),
+('jacuzzi', 2),
+('minibar', 2),
+('minibar', 3),
+('balcony', 4),
+('pay-tv', 5),
+('minibar', 11),
+('balcony', 11),
+('balcony', 6),
+('jacuzzi', 6),
+('balcony', 8),
+('jacuzzi', 8),
+('jacuzzi', 9),
+('minibar', 12),
+('minibar', 10),
+('pay-tv', 10),
+('balcony', 7),
+('pay-tv', 13);
+
+
+-- --------------------------------------------------------
+
+--
+-- Dump des donnees pour la table `HAS_SPACES`
+--
+
+INSERT INTO `HAS_SPACES` (`SPACES_Space`, `ROOM_CodR`) VALUES
+('bathroom', 3),
+('chambre � choucher', 3),
+('kitchen', 3),
+('kitchen', 4),
+('kitchen', 6),
+('kitchen', 13),
+('dining room', 3),
+('dining room', 7),
+('dining room', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Dump des donnees pour la table `BOOKING`
+--
+
+INSERT INTO `BOOKING` (`ROOM_CodR`, `StartDate`, `EndDate`, `Cost`, `TRAVEL_AGENCY_CodA`) VALUES
+(1, '2023-01-01', '2023-01-10', 1000, 1),
+(2, '2023-01-01', '2023-01-10', 1500, 2),
+(3, '2023-02-01', '2023-02-10', 800, 2),
+(13, '2023-03-01', '2023-03-10', 800, 2),
+(2, '2023-01-12', '2023-01-17', 560, 2),
+(3, '2023-03-13', '2023-03-17', 270, 2),
+(4, '2023-02-01', '2023-02-05', 300, 3),
+(3, '2023-02-06', '2023-02-07', 90, 3),
+(7, '2023-09-06', '2023-09-17', 1250, 3),
+(10, '2023-08-06', '2023-08-09', 950, 3),
+(10, '2023-04-16', '2023-04-19', 660, 5),
+(10, '2023-07-13', '2023-07-20', 1185, 5),
+(8, '2023-12-11', '2023-12-14', 710, 4);
+
+-- --------------------------------------------------------
+
