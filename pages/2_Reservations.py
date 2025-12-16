@@ -82,12 +82,34 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
     st.html("""
     <style>
         .property-card{
-          width:360px;
-          height:150px;
+          border: 1px solid #ffffff21;
+            display: flex;
+         align-items: flex-start;
+          width:100%;
+            height: 150px;
           border-radius:16px;
           overflow:hidden;
           box-shadow: 0 10px 30px rgba(20,30,70,0.08);
           transition:transform .25s ease, box-shadow .25s ease;
+        }
+        .property-card:hover:before{
+            transform: scale(2);
+            height: 7px;
+            border-radius: 50%;
+        }
+        .property-card:before {
+            content: "";
+            position: absolute;
+            background-color: #1369ce;
+          position: absolute;
+          width: 100%;
+        height: 0px;
+          bottom: 0px;
+          right: 0px;
+          opacity: 0.9;
+            border-radius: 0%;
+          transform: scale(0);
+          transition: all 0.4s linear 0s;
         }
         .property-card:hover{
           transform:translateY(-8px);
@@ -136,7 +158,12 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
     """)
 
 
-cols = st.columns(1)
-with cols[0]:
-    for index, row in df_reservations_display.iterrows():
-            cardChambre(row["ROOM_CodR"], row["SurfaceArea"], row["Type"], row["Floor"])
+cols = st.columns(3)
+i = 0
+for index, row in df_reservations_display.iterrows():
+    with cols[i]:
+        cardChambre(row["ROOM_CodR"], row["SurfaceArea"], row["Type"], row["Floor"])
+    if i == 2:
+        i = 0
+    else:
+        i = i + 1
