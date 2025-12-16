@@ -3,8 +3,11 @@ import pandas as pd
 from connectionDB import *
 import streamlit.components.v1 as components
 import base64
+from headEdite import *
 
-st.header("Page Chambres")
+headerEdit()
+st.set_page_config(page_title = "Welcome to Rooms Page")
+
 def img_to_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()

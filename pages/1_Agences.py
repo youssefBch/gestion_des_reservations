@@ -7,16 +7,31 @@ from streamlit_folium import st_folium
 from connectionDB import *
 from headEdite import *
 headerEdit()
-st.set_page_config(page_title = "Welcome To agencies page")
+st.set_page_config(page_title = "Welcome to Agencies Page")
 
 st.sidebar.success("Select Any Page from here")
-villes = conn.query("SELECT DISTINCT(Name) FROM CITY c, TRAVEL_AGENCY t WHERE c.Name=t.City_Address")
+villes = conn.query("""
+    SELECT DISTINCT(Name) 
+    FROM CITY c, TRAVEL_AGENCY t 
+    WHERE c.Name=t.City_Address
+    """)
 options = villes['Name'].to_list()
 selection = st.pills("Ville :", options, selection_mode="multi")
 if(not(selection)):
     st.subheader("Agences de Voyage Disponibles")
-    df_agenceMpa = conn.query(
-        "SELECT CodA,Tel,WebSite,Street_Address,ZIP_Address,Country_Address,Name,Longitude,Latitude FROM TRAVEL_AGENCY as agence,(SELECT Longitude,Latitude,Name FROM CITY) as ville_project WHERE agence.City_Address = ville_project.Name")
+    df_agenceMpa = conn.query("""
+    SELECT CodA,
+        Tel,
+        WebSite,
+        Street_Address,
+        ZIP_Address,
+        Country_Address,
+        Name,
+        Longitude,
+        Latitude
+     FROM TRAVEL_AGENCY as agence,(SELECT Longitude,Latitude,Name FROM CITY) as ville_project 
+     WHERE agence.City_Address = ville_project.Name
+    """)
 else:
     selected = tuple(selection)
     if(len(selected) == 1):
@@ -24,8 +39,20 @@ else:
         st.subheader(f"Agences de Voyage Disponibles a {selection[0]}")
     else:
         st.subheader(f"Agences de Voyage Disponibles a {' ,'.join(selected)}")
-    df_agenceMpa = conn.query(
-        f"SELECT CodA,Tel,WebSite,Street_Address,ZIP_Address,Country_Address,Name,Longitude,Latitude FROM TRAVEL_AGENCY as agence,(SELECT Longitude,Latitude,Name FROM CITY) as ville_project WHERE agence.City_Address = ville_project.Name AND Name in {selected }")
+    df_agenceMpa = conn.query(f"""
+    SELECT CodA,
+        Tel,
+        WebSite,
+        Street_Address,
+        ZIP_Address,
+        Country_Address,
+        Name,
+        Longitude,
+        Latitude 
+    FROM TRAVEL_AGENCY as agence,(SELECT Longitude,Latitude,Name FROM CITY) as ville_project 
+    WHERE agence.City_Address = ville_project.Name 
+    AND Name in {selected}
+    """)
 
 
 def cardAgence(code_a,telephone,site_web,Adresse_rue_a,VILLE_nom_ville):
