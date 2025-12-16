@@ -80,7 +80,9 @@ def cardAgence(code_a,telephone,site_web,Adresse_rue_a,VILLE_nom_ville):
               <li>📍 {Adresse_rue_a} </li>
               <li> 📍{VILLE_nom_ville}</li>
               <li>📞 {telephone}</li>
-              <li> {(site_web)}</li>
+              <li>
+                  <a href="{site_web}" target="_blank">{site_web}</a>
+              </li>
             </div>
           </div>
         </div>
@@ -108,12 +110,18 @@ avg_long = df_agenceMpa['Longitude'].mean()
 m = folium.Map(location=[avg_lat, avg_long], zoom_start=6)
 # Add markers for each city
 for index,row in df_agenceMpa.iterrows():
+    popup_content = f"""
+        <a href="){row["WebSite"]}" target="_blank">
+            {row["WebSite"]}
+        </a>
+    """
     tooltip_content = f"""
         <b>{row['Name']}</b><br>
         <i>Agence {row['CodA']}</i>
         """
     folium.Marker(
         [row["Latitude"],row["Longitude"]],
+        popup=popup_content,
         tooltip=tooltip_content,
     ).add_to(m)
 
