@@ -10,7 +10,7 @@ from headEdite import *
 headerEdit()
 import base64
 
-st.set_page_config(page_title="Welcome To our reservation web site", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded")
 
 
 def img_to_base64(path):
