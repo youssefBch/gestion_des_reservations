@@ -10,7 +10,7 @@ headerEdit()
 st.set_page_config(page_title = "Welcome To agencies page")
 
 st.sidebar.success("Select Any Page from here")
-villes = conn.query("SELECT DISTINCT(Name) FROM CITY")
+villes = conn.query("SELECT DISTINCT(Name) FROM CITY c, TRAVEL_AGENCY t WHERE c.Name=t.City_Address")
 options = villes['Name'].to_list()
 selection = st.pills("Ville :", options, selection_mode="multi")
 if(not(selection)):
@@ -26,14 +26,14 @@ else:
         st.subheader(f"Agences de Voyage Disponibles a {' ,'.join(selected)}")
     df_agenceMpa = conn.query(
         f"SELECT CodA,Tel,WebSite,Street_Address,ZIP_Address,Country_Address,Name,Longitude,Latitude FROM TRAVEL_AGENCY as agence,(SELECT Longitude,Latitude,Name FROM CITY) as ville_project WHERE agence.City_Address = ville_project.Name AND Name in {selected }")
-df_agences = conn.query("SELECT * FROM TRAVEL_AGENCY")
 
 
-def cardAgence(code_a,telephone,site_web,Adresse_rue_a,VILLE_nom_ville,map):
+def cardAgence(code_a,telephone,site_web,Adresse_rue_a,VILLE_nom_ville):
     st.html("""
     <style>
         .property-card{
           width:360px;
+          height:150px;
           border-radius:16px;
           overflow:hidden;
           box-shadow: 0 10px 30px rgba(20,30,70,0.08);
@@ -71,7 +71,6 @@ def cardAgence(code_a,telephone,site_web,Adresse_rue_a,VILLE_nom_ville,map):
         }
     </style>
     """)
-    st_folium(m,height=210)
     st.html(f"""
         <div>
         <div class="property-card">
@@ -81,7 +80,7 @@ def cardAgence(code_a,telephone,site_web,Adresse_rue_a,VILLE_nom_ville,map):
               <li>📍 {Adresse_rue_a} </li>
               <li> 📍{VILLE_nom_ville}</li>
               <li>📞 {telephone}</li>
-              <li>🌐 {site_web}</li>
+              <li> {(site_web)}</li>
             </div>
           </div>
         </div>
@@ -90,11 +89,33 @@ cols = st.columns(2)
 i = 0
 for index, row in df_agenceMpa.iterrows():
     with cols[i]:
-        m = folium.Map(location=[row["Latitude"], row["Longitude"]], zoom_start=6,height="210px",position="centre",)
-        # Add markers for each city
-        folium.Marker([row["Latitude"], row["Longitude"]], popup="Liberty Bell",tooltip="Liberty Bell").add_to(m)
-        cardAgence(row["CodA"], row["Tel"], row["WebSite"], row["Street_Address"], row["Name"], m)
+        if row["WebSite"] == None:
+            row["WebSite"] = ''
+        else:
+            row["WebSite"] = f"🌐 {row['WebSite']}"
+        cardAgence(row["CodA"], row["Tel"], row["WebSite"], row["Street_Address"], row["Name"])
     if i == 1:
         i = 0
     else:
         i = i + 1
+
+
+
+# Center map on the average location
+
+avg_lat = df_agenceMpa['Latitude'].mean()
+avg_long = df_agenceMpa['Longitude'].mean()
+m = folium.Map(location=[avg_lat, avg_long], zoom_start=6)
+# Add markers for each city
+for index,row in df_agenceMpa.iterrows():
+    tooltip_content = f"""
+        <b>{row['Name']}</b><br>
+        <i>Agence {row['CodA']}</i>
+        """
+    folium.Marker(
+        [row["Latitude"],row["Longitude"]],
+        tooltip=tooltip_content,
+    ).add_to(m)
+
+# call to render Folium map in Streamlit
+st_data = st_folium(m, width=725)
