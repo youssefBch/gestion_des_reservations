@@ -5,10 +5,28 @@ from sqlalchemy import text
 from connectionDB import *
 from headEdite import *
 headerEdit()
-st.set_page_config(page_title = "Welcome to the Booking Information Page")
+st.set_page_config(page_title = "Welcome to the Booking Information Page", layout="wide", initial_sidebar_state="expanded")
+st.markdown(
+        """
+        <style>
+        /* Sidebar background */
+        [data-testid="stSidebar"] {
+            background-color: #262730 !important;
+        }
 
-st.set_page_config(page_title="Welcome To our reservation web site", layout="wide", initial_sidebar_state="expanded")
+        /* Sidebar text color */
+        [data-testid="stSidebar"] * {
+            color: #ffffff !important;
+        }
 
+        /* Header / navbar background */
+        header {
+            background-color: #0E1117 !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 df_reservation = conn.query("""
 
 SELECT 
