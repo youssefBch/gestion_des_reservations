@@ -103,7 +103,7 @@ INSERT INTO HAS_AMENITIES (`AMENITIES_Amenity`, `ROOM_CodR`) VALUES
 
 INSERT INTO HAS_SPACES (`SPACES_Space`, `ROOM_CodR`) VALUES
 ('bathroom', 3),
-('chambre � choucher', 3),
+('chambre a choucher', 3),
 ('kitchen', 3),
 ('kitchen', 4),
 ('kitchen', 6),
