@@ -6,12 +6,17 @@ import folium
 from streamlit_folium import st_folium
 from connectionDB import *
 from headEdite import *
+
 headerEdit()
 import base64
-st.set_page_config(page_title = "Welcome To our reservation web site")
+
+st.set_page_config(page_title="Welcome To our reservation web site", layout="wide", initial_sidebar_state="expanded")
+
+
 def img_to_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
+
 
 def heroSection(*args):
     import streamlit.components.v1 as components
@@ -20,13 +25,11 @@ def heroSection(*args):
     <style>
     * {{box-sizing: border-box;}}
     body {{font-family: Verdana, sans-serif;}}
-    .mySlides {{display: none;}}
+    .mySlides {{display: none; border-radius: 10px;filter: brightness(0.5);}}
     img {{vertical-align: middle;}}
 
     .slideshow-container {{
-      max-width: 1000px;
       position: relative;
-      margin: auto;
       border-radius: 10px
     }}
 
@@ -51,9 +54,14 @@ def heroSection(*args):
     </div>
 
     <div style="text-align:center">
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
+        <div style="text-align:center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);color: #fff;">
+        <h1>Welcome to our hotel</h1>
+        <p>hello</p>
+        <span style="display:none" class="dot"></span>
+          <span style="display:none" class="dot"></span>
+          <span style="display:none" class="dot"></span>
+    </div>
+
     </div>
 
     <script>
@@ -90,12 +98,11 @@ heroSection("assets/bg1.jpg", "assets/bg2.jpg", "assets/bg3.jpg")
 
 st.space(size="medium")
 
-
 st.subheader("Notre hotels")
 st.space(size="small")
 
 
-def stasCard(nbr,title,icon):
+def stasCard(nbr, title, icon):
     st.html("""
         <style>
             .stat-card {
@@ -109,7 +116,7 @@ def stasCard(nbr,title,icon):
               text-align: center;
               box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             }
-            
+
             .icon {
               background-color: rgba(0, 102, 204, 0.15);
               color: #004c99;
@@ -121,14 +128,14 @@ def stasCard(nbr,title,icon):
               border-radius: 50%;
               background-color: rgba(0, 0, 0, 0.08);
             }
-            
+
             .value {
               font-size: 22px;
               font-weight: bold;
               margin-bottom: 5px;
               color: #002d66;
             }
-            
+
             .label {
               font-size: 13px;
               color: #555;
@@ -156,7 +163,9 @@ with col3:
 st.space(size="medium")
 st.subheader("Notre team")
 st.space(size="small")
-def profilCard(ftname,lname,imageUrl,role):
+
+
+def profilCard(ftname, lname, imageUrl, role):
     st.html("""
     <style>
     .our-team {
@@ -168,7 +177,7 @@ def profilCard(ftname,lname,imageUrl,role):
           overflow: hidden;
           position: relative;
         }
-        
+
         .our-team .picture {
           display: inline-block;
           height: 130px;
@@ -191,11 +200,11 @@ def profilCard(ftname,lname,imageUrl,role):
           transform: scale(3);
           transition: all 0.3s linear 0s;
         }
-        
+
         .our-team:hover .picture::before {
           height: 100%;
         }
-        
+
         .our-team .picture::after {
           content: "";
           width: 100%;
@@ -207,7 +216,7 @@ def profilCard(ftname,lname,imageUrl,role):
           left: 0;
           z-index: -1;
         }
-        
+
         .our-team .picture img {
           width: 100%;
           height: auto;
@@ -215,12 +224,12 @@ def profilCard(ftname,lname,imageUrl,role):
           transform: scale(1);
           transition: all 0.9s ease 0s;
         }
-        
+
         .our-team:hover .picture img {
           box-shadow: 0 0 0 14px #f7f5ec;
           transform: scale(0.7);
         }
-        
+
         .our-team .title {
           display: block;
           font-size: 15px;
@@ -231,7 +240,10 @@ def profilCard(ftname,lname,imageUrl,role):
     </style>
     """)
     st.html(f"""
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3" style="
+    width: 230px;
+    /* height: 136px; */
+">
       <div class="our-team">
         <div class="picture">
           <img class="img-fluid" src='data:image/png;base64,{imageUrl}'">
@@ -243,12 +255,18 @@ def profilCard(ftname,lname,imageUrl,role):
       </div>
     </div>
     """)
-col1,col2,col3 = st.columns(3)
+
+
+col1, col2, col3, col4, col5 = st.columns(5)
 with col1:
-    profilCard("Youssef","Bouchti",img_to_base64("assets/5.png"),"tester")
+    profilCard("Youssef", "Bouchti", img_to_base64("assets/5.png"), "tester")
 with col2:
-    profilCard("Amine","El Asri",img_to_base64("assets/5.png"),"tester")
+    profilCard("Amine", "El Asri", img_to_base64("assets/5.png"), "tester")
 with col3:
+    profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
+with col4:
+    profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
+with col5:
     profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
 
 
