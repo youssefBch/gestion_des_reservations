@@ -5,7 +5,28 @@ from sqlalchemy import text
 from connectionDB import *
 from headEdite import *
 headerEdit()
+st.set_page_config(page_title="Welcome To our reservation web site", layout="wide", initial_sidebar_state="expanded")
+st.markdown(
+        """
+        <style>
+        /* Sidebar background */
+        [data-testid="stSidebar"] {
+            background-color: #262730 !important;
+        }
 
+        /* Sidebar text color */
+        [data-testid="stSidebar"] * {
+            color: #ffffff !important;
+        }
+
+        /* Header / navbar background */
+        header {
+            background-color: #0E1117 !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 df_reservation = conn.query("""
 SELECT 
     r1.CHAMBRE_code_c, 
