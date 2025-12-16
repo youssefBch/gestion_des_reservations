@@ -11,29 +11,19 @@ def img_to_base64(path):
 
 df_chambre = conn.query("""
 SELECT *
-FROM CHAMBRE c
-LEFT JOIN HAS_EQUIPEMENT h ON h.CHAMBRE_code_c = c.code_c;
+FROM ROOM r
+LEFT JOIN HAS_AMENITIES h ON h.ROOM_CodR = r.CodR;
+LEFT JOIN HAS_SPACES ha ON ha.SPACE_CodR = r.CodR;
 """)
 
-df_suite = conn.query("SELECT * FROM SUITE")
-def get_type(row):
-    if row['code_c'] in df_suite['CHAMBRE_code_c'].values:
-        return 'Suite'
-    elif row['surface'] <= 25:
-        return 'Simple'
-    elif row['surface'] <= 50:
-        return 'Double'
-    else:
-        return 'Triple'
-
-df_chambre['type_chambre'] = df_chambre.apply(get_type, axis=1)
 
 # Grouper tous les équipements par chambre
-df_equipements = df_chambre.groupby('code_c')['EQUIPEMENT_equipement'].apply(list).reset_index()
+df_equipements = df_chambre.groupby('CodR')['AMENITIES_Amenity'].apply(list).reset_index()
 
 # Conserver les colonnes de surface et type_chambre
-df_chambre_unique = df_chambre[['code_c','surface','type_chambre']].drop_duplicates()
-df_chambre_grouped = df_chambre_unique.merge(df_equipements, on='code_c', how='left')
+df_chambre_unique = df_chambre.drop(columns="AMENITIES_Amenity").drop_duplicates()
+df_chambre_grouped = df_chambre_unique.merge(df_equipements, on='CodR', how='left')
+
 
 # ==============================
 # FILTRES
@@ -45,32 +35,30 @@ col1, col2, col3 = st.columns(3)
 with col1:
     type_filtre = st.radio(
         "Type de chambre",
-        ["Toutes", "Simple", "Double", "Triple"]
+        ["All", "Single", "Double", "Suite"]
     )
 
 with col2:
     options_filtre = st.multiselect(
-        "Options",
-        ["WiFi", "TV", "Balcon"]
+        "Amenities",
+        ["balcony", "jacuzzi", "minibar", "pay-tv"]
     )
 
 with col3:
-    cuisine_filtre = st.checkbox("Avec cuisine")
+    cuisine_filtre = st.checkbox("With kitchen")
 
 # ==============================
 # APPLICATION DES FILTRES
 # ==============================
 df_filtre = df_chambre_grouped.copy()
 
-if type_filtre != "Toutes":
-    df_filtre = df_filtre[df_filtre["type_chambre"] == type_filtre]
+if type_filtre != "All":
+    df_filtre = df_filtre[df_filtre["Type"] == f"{type_filtre.lower()}"]
 
-if type_filtre == "Toutes":
-    df_filtre = df_filtre[df_filtre["type_chambre"] != "Suite"]
 
 if options_filtre:
     df_filtre = df_filtre[
-        df_filtre["EQUIPEMENT_equipement"].apply(
+        df_filtre["AMENITIES_Amenity"].apply(
             lambda x: all(opt in x for opt in options_filtre)
         )
     ]
@@ -78,14 +66,14 @@ if options_filtre:
 
 # Filtre cuisine
 if cuisine_filtre:
-    df_filtre = df_filtre[df_filtre['EQUIPEMENT_equipement'].apply(lambda x: 'Cuisine' in x)]
+    df_filtre = df_filtre[df_filtre["SPACES_Space"]=="kitchen"]
 
 # ==============================
-# AFFICHAGE TABLE (OBLIGATOIRE)
+# AFFICHAGE TABLE
 # ==============================
 st.subheader("Chambres disponibles (Table)")
 st.dataframe(
-    df_filtre[["code_c", "surface", "type_chambre"]],
+    df_filtre[["CodR", "SurfaceArea", "Type"]],
     use_container_width=True
 )
 
@@ -146,7 +134,7 @@ cols = st.columns(2)
 i = 0
 for index, row in df_filtre.iterrows():
     with cols[i]:
-        cardChambre(row["code_c"], row["surface"], row["type_chambre"])
+        cardChambre(row["CodR"], row["SurfaceArea"], row["Type"])
     if i == 1:
         i = 0
     else:
