@@ -1,6 +1,6 @@
 DROP DATABASE gestion_db;
-CREATE DATABASE gestion_db;
-USE gestion_db;
+CREATE DATABASE hotel;
+USE hotel;
 -- --------------------------------------------------------
 
 --
