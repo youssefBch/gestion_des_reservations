@@ -5,36 +5,12 @@ from sqlalchemy import text
 from connectionDB import *
 from headEdite import *
 headerEdit()
-<<<<<<< HEAD
 st.set_page_config(page_title = "Welcome to the Booking Information Page")
 
-
-df_reservation = conn.query(f"""
-=======
 st.set_page_config(page_title="Welcome To our reservation web site", layout="wide", initial_sidebar_state="expanded")
-st.markdown(
-        """
-        <style>
-        /* Sidebar background */
-        [data-testid="stSidebar"] {
-            background-color: #262730 !important;
-        }
 
-        /* Sidebar text color */
-        [data-testid="stSidebar"] * {
-            color: #ffffff !important;
-        }
-
-        /* Header / navbar background */
-        header {
-            background-color: #0E1117 !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
 df_reservation = conn.query("""
->>>>>>> ced58354698bdb0be2ff12b15789ad5327f1799d
+
 SELECT 
     DATE_FORMAT(b1.StartDate, '%Y-%m-01') AS month,
     b1.ROOM_CodR,
