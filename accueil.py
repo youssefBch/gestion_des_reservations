@@ -12,11 +12,30 @@ import base64
 
 st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded")
 
+st.markdown(
+        """
+        <style>
+        /* Sidebar background */
+        [data-testid="stSidebar"] {
+            background-color: #262730 !important;
+        }
 
+        /* Sidebar text color */
+        [data-testid="stSidebar"] * {
+            color: #ffffff !important;
+        }
+
+        /* Header / navbar background */
+        header {
+            background-color: #0E1117 !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 def img_to_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
-
 
 def heroSection(*args):
     import streamlit.components.v1 as components
@@ -105,6 +124,7 @@ st.space(size="small")
 def stasCard(nbr, title, icon):
     st.html("""
         <style>
+        /*****
             .stat-card {
               background-color: #d6eaff;
               flex: 1;
@@ -140,15 +160,64 @@ def stasCard(nbr, title, icon):
               font-size: 13px;
               color: #555;
             }
+***/
+            .card {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            border: 1px solid rgb(163 168 184 / 37%);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition:transform .25s ease, box-shadow .25s ease;
+        }
+    .card:hover{
+          transform:translateY(-8px);
+          box-shadow: 0 20px 50px rgba(20,30,70,0.12);
+        }
+        .card dt {
+            font-size: 01rem;
+            font-weight: 500;
+            color: #6b7280; /* gray-500 */
+            margin-bottom: 0.5rem;
+        }
 
+        .card dd {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #4f46e5; /* indigo-600 */
+        }
+        .card:before {
+            content: "";
+            position: absolute;
+            background-color: #1369ce;
+          position: absolute;
+          width: 100px;
+        height: 100%;
+          bottom: 0;
+          right: -100px;
+          opacity: 0.9;
+            border-radius: 0%;
+          transform: scale(0);
+          transition: all 0.4s linear 0s;
+        }
+        .card:hover:before{
+            transform: scale(2);
+            border-radius: 50%;
+        }
         </style>
     """)
     st.html(f"""
-      <div class="stat-card">
+      <!--div class="stat-card">
         <div class="icon">{icon}</div>
         <div class="value">{nbr}</div>
         <div class="label">{title}</div>
-      </div>
+      </div--->
+                  <div class="card">
+                <dl>
+                    <dt>{title}</dt>
+                    <dd>{nbr}</dd>
+                </dl>
+            </div>
 """)
 col1,col2,col3 = st.columns(3)
 nbrAgance = conn.query("SELECT count(*) as nrbAgance FROM TRAVEL_AGENCY")["nrbAgance"][0]
@@ -176,13 +245,17 @@ def profilCard(ftname, lname, imageUrl, role):
           border-radius: 10px;
           overflow: hidden;
           position: relative;
+          transition:transform .25s ease, box-shadow .25s ease;
         }
-
+    .our-team:hover{
+          transform:translateY(-8px);
+          box-shadow: 0 20px 50px rgba(20,30,70,0.12);
+        }
         .our-team .picture {
           display: inline-block;
-          height: 130px;
-          width: 130px;
-          margin-bottom: 50px;
+          width: 100px;
+            height: 100px;
+            margin: 0;
           z-index: 1;
           position: relative;
         }
@@ -240,16 +313,20 @@ def profilCard(ftname, lname, imageUrl, role):
     </style>
     """)
     st.html(f"""
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3" style="
+        <div style="
     width: 230px;
     /* height: 136px; */
 ">
-      <div class="our-team">
+      <div class="our-team"style="
+    background-color: rgb(230, 234, 241);">
         <div class="picture">
           <img class="img-fluid" src='data:image/png;base64,{imageUrl}'">
         </div>
         <div class="team-content">
-          <h3 class="name" style="color: #31333F;text-transform: capitalize; font-size: 20px;">{ftname} {lname}</h3>
+          <h3 class="name" style="color: #31333F;text-transform: capitalize; font-size: 20px;color: #31333F;
+    text-transform: capitalize;
+    font-size: 20px;
+    margin: 15px 0px 5px 0px;">{ftname} {lname}</h3>
           <h4 class="title">{role}</h4>
         </div>
       </div>
@@ -257,7 +334,7 @@ def profilCard(ftname, lname, imageUrl, role):
     """)
 
 
-col1, col2, col3, col4, col5 = st.columns(5)
+col1, col2, col3, col4 = st.columns(4,gap='small')
 with col1:
     profilCard("Youssef", "Bouchti", img_to_base64("assets/5.png"), "tester")
 with col2:
@@ -266,7 +343,7 @@ with col3:
     profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
 with col4:
     profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
-with col5:
+with col1:
     profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
 
 
