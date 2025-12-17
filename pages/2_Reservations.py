@@ -4,12 +4,6 @@ import numpy as np
 from sqlalchemy import text
 from connectionDB import *
 from headEdite import *
-import base64
-
-def img_to_base64(path):
-    with open(path, "rb") as f:
-        return base64.b64encode(f.read()).decode()
-
 headerEdit()
 st.set_page_config(page_title = "Welcome to the Booking Information Page", layout="wide", initial_sidebar_state="expanded")
 st.markdown(
@@ -88,15 +82,37 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
     st.html("""
     <style>
         .property-card{
-          width:360px;
-          height:150px;
+          border: 1px solid #ffffff21;
+            display: flex;
+         align-items: flex-start;
+          width:100%;
+            height: 150px;
           border-radius:16px;
           overflow:hidden;
           box-shadow: 0 10px 30px rgba(20,30,70,0.08);
           transition:transform .25s ease, box-shadow .25s ease;
         }
+        .property-card:hover:before{
+            transform: scale(2);
+            height: 7px;
+            border-radius: 50%;
+        }
+        .property-card:before {
+            content: "";
+            position: absolute;
+            background-color: #1369ce;
+          position: absolute;
+          width: 100%;
+        height: 0px;
+          bottom: 0px;
+          right: 0px;
+          opacity: 0.9;
+            border-radius: 0%;
+          transform: scale(0);
+          transition: all 0.4s linear 0s;
+        }
         .property-card:hover{
-          transform:translateY(-1px);
+          transform:translateY(-8px);
           box-shadow: 0 20px 50px rgba(20,30,70,0.12);
         }
         .property-map{
@@ -109,9 +125,9 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
           padding:18px;
         }
         .card-body .title{
-            margin: 0 0 8px 0;
+              margin: 0 0 8px 0;
             font-size: 18px;
-            color: var(--muted);
+            color: #f4f4f4 !important;
         }
 
         .meta {
@@ -142,33 +158,12 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
     """)
 
 
-from PIL import Image
-
-for idx, row in df_reservations_display.iterrows():
-
-    col1, col2 = st.columns([1, 1])
-
-    # --- CARD COLUMN ---
-    with col1:
-        cardChambre(
-            row["ROOM_CodR"],
-            row["SurfaceArea"],
-            row["Type"],
-            row["Floor"]
-        )
-
-    # --- IMAGE COLUMN ---
-    with col2:
-        # Select image based on room type
-        if row["Type"] == "double":
-            image = Image.open("assets/bg5.jpg")
-        elif row["Type"] == "suite":
-            image = Image.open("assets/bg2.jpg")
-
-        # Display image always
-        st.image(image, width=320)
-
-        # --- ESPACE ENTRE LES LIGNES ---
-        st.markdown("<br><br>", unsafe_allow_html=True)
-
-
+cols = st.columns(3)
+i = 0
+for index, row in df_reservations_display.iterrows():
+    with cols[i]:
+        cardChambre(row["ROOM_CodR"], row["SurfaceArea"], row["Type"], row["Floor"])
+    if i == 2:
+        i = 0
+    else:
+        i = i + 1

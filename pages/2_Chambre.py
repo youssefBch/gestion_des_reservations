@@ -108,8 +108,7 @@ def cardChambre(code_c, surface, type_chambre):
             border: 1px solid #ffffff21;
             display: flex;
          align-items: flex-start;
-          width:360px;
-            height: 320px;
+width:100%;            height: 320px;
           border-radius:16px;
           overflow:hidden;
           box-shadow: 0 10px 30px rgba(20,30,70,0.08);
@@ -119,7 +118,7 @@ def cardChambre(code_c, surface, type_chambre):
           transform:translateY(-8px);
           box-shadow: 0 20px 50px rgba(20,30,70,0.12);
         }
-                .property-card:hover:before{
+        .property-card:hover:before{
             transform: scale(2);
             height: 7px;
             border-radius: 50%;

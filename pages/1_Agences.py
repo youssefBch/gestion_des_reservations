@@ -57,7 +57,7 @@ def cardAgence(code_a,telephone,site_web,Adresse_rue_a,VILLE_nom_ville):
         border: 1px solid #ffffff21;
             display: flex;
     align-items: flex-start;
-          width:360px;
+          width:100%;
           height:150px;
           border-radius:16px;
           overflow:hidden;
