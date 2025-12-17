@@ -9,8 +9,6 @@ def headerEdit():
         .stSidebar {
             position: relative;
             width: 280px;
-            border-radius: 20px;
-            
         }
         .st-emotion-cache-13k62yr {
             inset: 5px;
