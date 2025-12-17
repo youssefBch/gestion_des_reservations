@@ -11,7 +11,6 @@ def img_to_base64(path):
         return base64.b64encode(f.read()).decode()
 
 headerEdit()
-st.set_page_config(page_title = "Welcome to the Booking Information Page", layout="wide", initial_sidebar_state="expanded")
 st.markdown(
         """
         <style>
@@ -33,6 +32,42 @@ st.markdown(
         """,
         unsafe_allow_html=True
     )
+# if cost was per period
+df_reservation = conn.query("""
+
+SELECT 
+    m.month,
+    m.ROOM_CodR,
+    r.Floor,
+    r.SurfaceArea,
+    r.Type,
+    m.avg_daily_cost
+FROM (
+    SELECT 
+        DATE_FORMAT(b.StartDate, '%Y-%m-01') AS month,
+        b.ROOM_CodR,
+        AVG(b.Cost / DATEDIFF(b.EndDate, b.StartDate)) AS avg_daily_cost
+    FROM BOOKING b
+    GROUP BY month, b.ROOM_CodR
+) AS m
+JOIN ROOM r ON r.CodR = m.ROOM_CodR
+JOIN (
+    SELECT month, MAX(avg_daily_cost) AS max_cost
+    FROM (
+        SELECT 
+            DATE_FORMAT(b.StartDate, '%Y-%m-01') AS month,
+            b.ROOM_CodR,
+            AVG(b.Cost / DATEDIFF(b.EndDate, b.StartDate)) AS avg_daily_cost
+        FROM BOOKING b
+        GROUP BY month, b.ROOM_CodR
+    ) AS t
+    GROUP BY month
+) AS h
+ON m.month = h.month AND m.avg_daily_cost = h.max_cost
+ORDER BY m.month;
+
+""")
+# if cost was per day ( as the project says )
 df_reservation = conn.query("""
 
 SELECT 
@@ -70,16 +105,16 @@ options = [
 selection = st.pills("months :", options, selection_mode="multi")
 
 if(not(selection)):
-    st.subheader("Chambre ayant le coût journalier moyen le plus élevé par mois")
+    st.subheader("Room with the Highest Average Daily Rate per Month")
     df_reservations_display = df_reservation
 else:
     selected = list(selection)
     if(len(selected) == 1):
         nombre_chambre = len(df_reservation[df_reservation['Month'] == selected[0]])
-        st.subheader(f"Chambre ayant le coût journalier moyen le plus élevé en {selection[0]} ({nombre_chambre}) :")
+        st.subheader(f"Room with the Highest Average Daily Rate per Month in {selection[0]} ({nombre_chambre}) :")
     else:
         nombre_chambre = len(df_reservation[df_reservation['Month'].isin(selected)])
-        st.subheader(f"Chambre ayant le coût journalier moyen le plus élevé en {', '.join(selected)} ({nombre_chambre}) :")
+        st.subheader(f"Room with the Highest Average Daily Rate per Month in {', '.join(selected)} ({nombre_chambre}) :")
 
     df_reservations_display = df_reservation[df_reservation['Month'].isin(selected)]
 
@@ -106,7 +141,7 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
         .property-card:before {
             content: "";
             position: absolute;
-            background-color: #1369ce;
+background-color: #b8962e;
           position: absolute;
           width: 100%;
         height: 0px;
@@ -118,7 +153,7 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
           transition: all 0.4s linear 0s;
         }
         .property-card:hover{
-          transform:translateY(-1px);
+          transform:translateY(-8px);
           box-shadow: 0 20px 50px rgba(20,30,70,0.12);
         }
         .property-map{
@@ -131,9 +166,8 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
           padding:18px;
         }
         .card-body .title{
-            margin: 0 0 8px 0;
+              margin: 0 0 8px 0;
             font-size: 18px;
-            color: var(--muted);
         }
 
         .meta {
@@ -164,34 +198,24 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
     """)
 
 
-from PIL import Image
+cols = st.columns(3)
+i = 0
+for index, row in df_reservations_display.iterrows():
+    with cols[i]:
+        cardChambre(row["ROOM_CodR"], row["SurfaceArea"], row["Type"], row["Floor"])
+    if i == 2:
+        i = 0
+    else:
+        i = i + 1
+st.space(size="medium")
 
-for idx, row in df_reservations_display.iterrows():
+st.subheader("Price Variation by Month")
 
-    col1, col2 = st.columns([1, 1])
-
-    # --- CARD COLUMN ---
-    with col1:
-        cardChambre(
-            row["ROOM_CodR"],
-            row["SurfaceArea"],
-            row["Type"],
-            row["Floor"]
-        )
-
-    # --- IMAGE COLUMN ---
-    with col2:
-        # Select image based on room type
-        if row["Type"] == "double":
-            image = Image.open("assets/bg5.jpg")
-        elif row["Type"] == "suite":
-            image = Image.open("assets/bg2.jpg")
-
-        # Display image always
-        st.image(image, width=320)
-
-
-        st.markdown("<br><br>", unsafe_allow_html=True)
-
-
+df = conn.query("SELECT DATE_FORMAT(StartDate, '%Y-%m-01') AS month, avg(Cost) as avg_cost FROM BOOKING group by month")
+df["month"] = pd.DatetimeIndex(df["month"]).strftime('%B')
+st.line_chart(
+    df,
+    x="month",
+    y="avg_cost",
+)
 

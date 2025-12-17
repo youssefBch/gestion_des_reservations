@@ -10,8 +10,6 @@ from headEdite import *
 headerEdit()
 import base64
 
-st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded")
-
 st.markdown(
         """
         <style>
@@ -42,45 +40,133 @@ def heroSection(*args):
 
     html_code = f"""
     <style>
-    * {{box-sizing: border-box;}}
-    body {{font-family: Verdana, sans-serif;}}
-    .mySlides {{display: none; border-radius: 10px;filter: brightness(0.5);}}
-    img {{vertical-align: middle;}}
+    * {{
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }}
 
     .slideshow-container {{
-      position: relative;
-      border-radius: 10px
+        position: relative;
+        width: 100%;
+        height: 600px;
+        overflow: hidden;
+        border-radius: 12px;
     }}
 
-    .dot {{
-      height: 15px;
-      width: 15px;
-      margin: 0 2px;
-      background-color: #bbb;
-      border-radius: 50%;
-      display: inline-block;
+    .mySlides {{
+        display: none;
+        width: 100%;
+        height: 600px;
+        object-fit: cover;
+        filter: brightness(0.45);
     }}
 
-    .active {{
-      background-color: #717171;
+    /* HERO OVERLAY */
+    .hero-overlay {{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: white;
+        max-width: 900px;
+        padding: 20px;
+    }}
+
+    .hero-label {{
+        letter-spacing: 2px;
+        font-size: 14px;
+        color: #d4af37;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+    }}
+
+    .hero-title {{
+        font-size: 56px;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 15px;
+    }}
+
+    .hero-subtitle {{
+        font-size: 22px;
+        margin-bottom: 20px;
+        opacity: 0.95;
+    }}
+
+    .hero-description {{
+        font-size: 16px;
+        line-height: 1.7;
+        opacity: 0.9;
+        margin-bottom: 35px;
+    }}
+
+    .hero-buttons {{
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }}
+
+    .hero-btn {{
+        padding: 14px 28px;
+        font-size: 15px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }}
+
+    .btn-primary {{
+        background-color: #d4af37;
+        color: #111;
+    }}
+
+    .btn-primary:hover {{
+        background-color: #b8962e;
+    }}
+
+    .btn-secondary {{
+        background-color: transparent;
+        border: 2px solid #fff;
+        color: #fff;
+    }}
+
+    .btn-secondary:hover {{
+        background-color: #fff;
+        color: #111;
     }}
     </style>
 
     <div class="slideshow-container">
-      <img class="mySlides" src="data:image/png;base64,{img_to_base64(args[0])}" style="width:100%">
-      <img class="mySlides" src="data:image/png;base64,{img_to_base64(args[1])}" style="width:100%">
-      <img class="mySlides" src="data:image/png;base64,{img_to_base64(args[2])}" style="width:100%">
-    </div>
+        <img class="mySlides" src="data:image/png;base64,{img_to_base64(args[0])}">
+        <img class="mySlides" src="data:image/png;base64,{img_to_base64(args[1])}">
+        <img class="mySlides" src="data:image/png;base64,{img_to_base64(args[2])}">
 
-    <div style="text-align:center">
-        <div style="text-align:center;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);color: #fff;">
-        <h1>Welcome to our hotel</h1>
-        <p>hello</p>
-        <span style="display:none" class="dot"></span>
-          <span style="display:none" class="dot"></span>
-          <span style="display:none" class="dot"></span>
-    </div>
+        <div class="hero-overlay">
+            <div class="hero-label">— Premium Hotel Experience —</div>
 
+            <div class="hero-title">
+                Experience Comfort, Elegance <br>& Serenity
+            </div>
+
+            <div class="hero-subtitle">
+                A refined stay designed for unforgettable moments
+            </div>
+
+            <div class="hero-description">
+                Discover a modern hotel management platform where luxury meets simplicity.
+                Explore elegant rooms, manage reservations effortlessly, and enjoy a seamless
+                experience tailored for your comfort.
+            </div>
+
+            <div class="hero-buttons">
+                <button class="hero-btn btn-primary">Explore Rooms</button>
+                <button class="hero-btn btn-secondary">Check Availability</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -88,36 +174,29 @@ def heroSection(*args):
     showSlides();
 
     function showSlides() {{
-      let slides = document.getElementsByClassName("mySlides");
-      let dots = document.getElementsByClassName("dot");
+        let slides = document.getElementsByClassName("mySlides");
 
-      for (let i = 0; i < slides.length; i++) {{
-        slides[i].style.display = "none";
-      }}
+        for (let i = 0; i < slides.length; i++) {{
+            slides[i].style.display = "none";
+        }}
 
-      slideIndex++;
-      if (slideIndex > slides.length) {{slideIndex = 1}}
+        slideIndex++;
+        if (slideIndex > slides.length) {{ slideIndex = 1 }}
 
-      for (let i = 0; i < dots.length; i++) {{
-        dots[i].className = dots[i].className.replace(" active", "");
-      }}
-
-      slides[slideIndex - 1].style.display = "block";
-      dots[slideIndex - 1].className += " active";
-
-      setTimeout(showSlides, 2000);
+        slides[slideIndex - 1].style.display = "block";
+        setTimeout(showSlides, 3000);
     }}
     </script>
     """
 
-    components.html(html_code, height=600)
+    components.html(html_code, height=650)
 
 
 heroSection("assets/bg1.jpg", "assets/bg2.jpg", "assets/bg3.jpg")
 
 st.space(size="medium")
 
-st.subheader("Notre hotels")
+st.subheader("Hotel Summary")
 st.space(size="small")
 
 
@@ -185,12 +264,12 @@ def stasCard(nbr, title, icon):
         .card dd {
             font-size: 2rem;
             font-weight: 600;
-            color: #4f46e5; /* indigo-600 */
+            color: #d4af37;
         }
         .card:before {
             content: "";
             position: absolute;
-            background-color: #1369ce;
+            background-color: #b8962e;
           position: absolute;
           width: 100px;
         height: 100%;
@@ -221,17 +300,17 @@ def stasCard(nbr, title, icon):
             </div>
 """)
 col1,col2,col3 = st.columns(3)
-nbrAgance = conn.query("SELECT count(*) as nrbAgance FROM TRAVEL_AGENCY")["nrbAgance"][0]
-nbrVille = conn.query("SELECT count(*) as nbrVille FROM CITY")["nbrVille"][0]
-nbrResevation = conn.query("SELECT count(*) as nbrResevation FROM BOOKING")["nbrResevation"][0]
+nbrBOOKING = conn.query("SELECT count(*) as nbrBOOKING FROM BOOKING")["nbrBOOKING"][0]
+nbrRoom = conn.query("SELECT count(*) as nbrRoom FROM ROOM")["nbrRoom"][0]
+nbrAumnities = conn.query("SELECT count(*) as nbrAmni FROM HAS_AMENITIES")["nbrAmni"][0]
 with col1:
-    stasCard(nbrAgance, "nombres des agence", "🏢")
+    stasCard(nbrBOOKING, "Total Reservations", "🏢")
 with col2:
-    stasCard(nbrAgance, "nombres des agence", "🏢")
+    stasCard(nbrRoom, "Total Rooms", "🏢")
 with col3:
-    stasCard(nbrAgance, "nombres des agence", "🏢")
+    stasCard(nbrAumnities, "Total Amenities", "🏢")
 st.space(size="medium")
-st.subheader("Notre team")
+st.subheader("Our Team")
 st.space(size="small")
 
 
@@ -242,7 +321,7 @@ def profilCard(ftname, lname, imageUrl, role):
             width:100%;
           padding: 30px 0 40px;
           margin-bottom: 30px;
-          background-color: #f7f5ec;
+          background-color: #fffcf3;
           text-align: center;
           border-radius: 10px;
           width:100%;
@@ -267,7 +346,7 @@ def profilCard(ftname, lname, imageUrl, role):
           width: 100%;
           height: 0;
           border-radius: 50%;
-          background-color: #1369ce;
+        background-color: #b8962e;
           position: absolute;
           bottom: 135%;
           right: 0;
@@ -321,7 +400,7 @@ def profilCard(ftname, lname, imageUrl, role):
     /* height: 136px; */
 ">
       <div class="our-team"style="
-    background-color: rgb(230, 234, 241);">
+        background-color: rgb(255 255 255);">
         <div class="picture">
           <img class="img-fluid" src='data:image/png;base64,{imageUrl}'">
         </div>
@@ -330,7 +409,6 @@ def profilCard(ftname, lname, imageUrl, role):
     text-transform: capitalize;
     font-size: 20px;
     margin: 15px 0px 5px 0px;">{ftname} {lname}</h3>
-          <h4 class="title">{role}</h4>
         </div>
       </div>
     </div>
@@ -339,15 +417,19 @@ def profilCard(ftname, lname, imageUrl, role):
 
 col1, col2, col3, col4 = st.columns(4,gap='small')
 with col1:
-    profilCard("Youssef", "Bouchti", img_to_base64("assets/5.png"), "tester")
+    profilCard("Youssef", "Bouchti", img_to_base64("assets/12.png"), "tester")
 with col2:
-    profilCard("Amine", "El Asri", img_to_base64("assets/5.png"), "tester")
+    profilCard("Amine", "El Asri", img_to_base64("assets/12.png"), "tester")
 with col3:
-    profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
+    profilCard("Zainab", "Rezoukia", img_to_base64("assets/66.png"), "tester")
 with col4:
-    profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
+    profilCard("Badr", "El majdoub", img_to_base64("assets/12.png"), "tester")
 with col1:
-    profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
+    profilCard("Najoua", "Horma", img_to_base64("assets/66.png"), "tester")
+with col2:
+    profilCard("Chaimae", "Ghonim", img_to_base64("assets/66.png"), "tester")
+with col3:
+    profilCard("Mariem", "Sidi", img_to_base64("assets/66.png"), "tester")
 
 
 
