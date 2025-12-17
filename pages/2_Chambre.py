@@ -167,17 +167,23 @@ width:100%;            height: 320px;
         }
     </style>
     """)
+
+    if type_chambre == "suite":
+        image_html = f'<img class="card-image" src="data:image/png;base64,{img_to_base64("assets/bg6.jpg")}" style="width:100%">'
+    elif type_chambre == "double":
+        image_html = f'<img class="card-image" src="data:image/png;base64,{img_to_base64("assets/bg7.jpg")}" style="width:100%">'
+    elif type_chambre == "single":
+        image_html = f'<img class="card-image" src="data:image/png;base64,{img_to_base64("assets/bg9.jpg")}" style="width:100%">'
     st.html(f"""
-        <div>
         <div class="property-card">
-          <div class="card-body">
-            <img class="card-image" src="data:image/png;base64,{img_to_base64("assets/bg1.jpg")}" style="width:100%">
-            <h3 class="title">Code chambre {code_c}</h3>
-            <ul class="meta">
-              <li>Surface : {surface}</li>
-              <li>Type de chambre : {type_chambre}</li>
+            <div class="card-body">
+                {image_html}
+                <h3 class="title">Code chambre {code_c}</h3>
+                <ul class="meta">
+                    <li>Surface : {surface}</li>
+                    <li>Type de chambre : {type_chambre}</li>
+                </ul>
             </div>
-          </div>
         </div>
     """)
 
