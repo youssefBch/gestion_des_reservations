@@ -8,9 +8,7 @@ def headerEdit():
     <style>
         .stSidebar {
             position: relative;
-            width: 280px;
-            border-radius: 20px;
-            
+            width: 280px;            
         }
         .st-emotion-cache-13k62yr {
             inset: 5px;

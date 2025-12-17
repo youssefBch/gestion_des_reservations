@@ -10,7 +10,7 @@ from headEdite import *
 headerEdit()
 import base64
 
-st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded",page_icon="🏨")
 
 st.markdown(
         """
@@ -306,11 +306,11 @@ nbrBOOKING = conn.query("SELECT count(*) as nbrBOOKING FROM BOOKING")["nbrBOOKIN
 nbrRoom = conn.query("SELECT count(*) as nbrRoom FROM ROOM")["nbrRoom"][0]
 nbrAumnities = conn.query("SELECT count(*) as nbrAmni FROM HAS_AMENITIES")["nbrAmni"][0]
 with col1:
-    stasCard(nbrBOOKING, "nombres des reservation", "🏢")
+    stasCard(nbrBOOKING, "Total Reservations", "🏢")
 with col2:
-    stasCard(nbrRoom, "nombres des ROOM", "🏢")
+    stasCard(nbrRoom, "Total Rooms", "🏢")
 with col3:
-    stasCard(nbrAumnities, "nombres des amenities", "🏢")
+    stasCard(nbrAumnities, "Total Amenities", "🏢")
 st.space(size="medium")
 st.subheader("Notre team")
 st.space(size="small")

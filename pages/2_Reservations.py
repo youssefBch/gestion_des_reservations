@@ -11,7 +11,7 @@ def img_to_base64(path):
         return base64.b64encode(f.read()).decode()
 
 headerEdit()
-st.set_page_config(page_title = "Welcome to the Booking Information Page", layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded",page_icon="🏨")
 st.markdown(
         """
         <style>

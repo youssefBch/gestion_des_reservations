@@ -8,7 +8,7 @@ from connectionDB import *
 from headEdite import *
 
 headerEdit()
-st.set_page_config(page_title = "Welcome To agencies page",layout="wide", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded",page_icon="🏨")
 
 st.markdown(
         """
@@ -139,11 +139,11 @@ nbrAgance = conn.query("SELECT count(*) as nrbAgance FROM TRAVEL_AGENCY")["nrbAg
 nbrVille = conn.query("SELECT count(*) as nbrVille FROM CITY")["nbrVille"][0]
 nbrResevation = conn.query("SELECT count(CodA),City_Address FROM TRAVEL_AGENCY group by City_Address order by count(CodA) DESC")["City_Address"][0]
 with col1:
-    stasCard(nbrAgance, "nombres des agence", "🏢")
+    stasCard(nbrAgance, "Total Travel Agencies", "🏢")
 with col2:
-    stasCard(nbrAgance, "nombres des agence", "🏢")
+    stasCard(nbrVille, "Total Cities", "🏢")
 with col3:
-    stasCard(nbrAgance, "nombres des agence", "🏢")
+    stasCard(nbrResevation, "City with Most Agencies", "🏢")
 
 st.space(size="medium")
 villes = conn.query("SELECT DISTINCT(Name) FROM CITY c, TRAVEL_AGENCY t WHERE c.Name=t.City_Address")
