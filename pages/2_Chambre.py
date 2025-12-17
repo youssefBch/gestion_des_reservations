@@ -33,10 +33,12 @@ def img_to_base64(path):
         return base64.b64encode(f.read()).decode()
 
 df_chambre = conn.query("""
-SELECT *
+SELECT r.*, 
+       h.*, 
+       ha.SPACES_Space
 FROM ROOM r
-LEFT JOIN HAS_AMENITIES h ON h.ROOM_CodR = r.CodR;
-LEFT JOIN HAS_SPACES ha ON ha.SPACE_CodR = r.CodR;
+LEFT JOIN HAS_AMENITIES h ON h.ROOM_CodR = r.CodR
+LEFT JOIN HAS_SPACES ha ON ha.ROOM_CodR = r.CodR;
 """)
 
 
