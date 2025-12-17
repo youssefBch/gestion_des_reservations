@@ -31,7 +31,121 @@ st.markdown(
         """,
         unsafe_allow_html=True
     )
+st.subheader("Notre hotels")
+st.space(size="small")
 
+
+def stasCard(nbr, title, icon):
+    st.html("""
+        <style>
+        /*****
+            .stat-card {
+              background-color: #d6eaff;
+              flex: 1;
+              min-width: 180px;
+              max-width: 220px;
+              background-color: #eee;
+              border-radius: 15px;
+              padding: 20px;
+              text-align: center;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .icon {
+              background-color: rgba(0, 102, 204, 0.15);
+              color: #004c99;
+              font-size: 24px;
+              width: 40px;
+              height: 40px;
+              margin: 0 auto 10px;
+              line-height: 40px;
+              border-radius: 50%;
+              background-color: rgba(0, 0, 0, 0.08);
+            }
+
+            .value {
+              font-size: 22px;
+              font-weight: bold;
+              margin-bottom: 5px;
+              color: #002d66;
+            }
+
+            .label {
+              font-size: 13px;
+              color: #555;
+            }
+***/
+           .card {
+            width:100%;
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            border: 1px solid rgb(163 168 184 / 37%);
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition:transform .25s ease, box-shadow .25s ease;
+        }
+    .card:hover{
+          transform:translateY(-8px);
+          box-shadow: 0 20px 50px rgba(20,30,70,0.12);
+        }
+        .card dt {
+            font-size: 01rem;
+            font-weight: 500;
+            color: #6b7280; /* gray-500 */
+            margin-bottom: 0.5rem;
+        }
+
+        .card dd {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #d4af37;
+        }
+        .card:before {
+            content: "";
+            position: absolute;
+            background-color: #b8962e;
+          position: absolute;
+          width: 100px;
+        height: 100%;
+          bottom: 0;
+          right: -100px;
+          opacity: 0.9;
+            border-radius: 0%;
+          transform: scale(0);
+          transition: all 0.4s linear 0s;
+        }
+        .card:hover:before{
+            transform: scale(2);
+            border-radius: 50%;
+        }
+        </style>
+    """)
+    st.html(f"""
+      <!--div class="stat-card">
+        <div class="icon">{icon}</div>
+        <div class="value">{nbr}</div>
+        <div class="label">{title}</div>
+      </div--->
+                  <div class="card">
+                <dl>
+                    <dt>{title}</dt>
+                    <dd>{nbr}</dd>
+                </dl>
+            </div>
+""")
+col1,col2,col3 = st.columns(3)
+nbrAgance = conn.query("SELECT count(*) as nrbAgance FROM TRAVEL_AGENCY")["nrbAgance"][0]
+nbrVille = conn.query("SELECT count(*) as nbrVille FROM CITY")["nbrVille"][0]
+nbrResevation = conn.query("SELECT count(CodA),City_Address FROM TRAVEL_AGENCY group by City_Address order by count(CodA) DESC")["City_Address"][0]
+with col1:
+    stasCard(nbrAgance, "nombres des agence", "🏢")
+with col2:
+    stasCard(nbrAgance, "nombres des agence", "🏢")
+with col3:
+    stasCard(nbrAgance, "nombres des agence", "🏢")
+
+st.space(size="medium")
 villes = conn.query("SELECT DISTINCT(Name) FROM CITY c, TRAVEL_AGENCY t WHERE c.Name=t.City_Address")
 options = villes['Name'].to_list()
 selection = st.pills("Ville :", options, selection_mode="multi")
@@ -67,7 +181,7 @@ def cardAgence(code_a,telephone,site_web,Adresse_rue_a,VILLE_nom_ville):
         .property-card:before {
             content: "";
             position: absolute;
-            background-color: #1369ce;
+            background-color: #b8962e;
           position: absolute;
           width: 100%;
         height: 0px;
