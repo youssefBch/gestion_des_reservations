@@ -8,7 +8,6 @@ from connectionDB import *
 from headEdite import *
 
 headerEdit()
-st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded",page_icon="🏨")
 
 st.markdown(
         """
@@ -31,7 +30,7 @@ st.markdown(
         """,
         unsafe_allow_html=True
     )
-st.subheader("Notre hotels")
+st.subheader("Travel Agency Statistics")
 st.space(size="small")
 
 
@@ -148,23 +147,23 @@ with col3:
 st.space(size="medium")
 villes = conn.query("SELECT DISTINCT(Name) FROM CITY c, TRAVEL_AGENCY t WHERE c.Name=t.City_Address")
 options = villes['Name'].to_list()
-selection = st.pills("Ville :", options, selection_mode="multi")
+selection = st.pills("Cities :", options, selection_mode="multi")
 if(not(selection)):
-    st.subheader("Agences de Voyage Disponibles")
+    st.subheader("Available Travel Agencies")
     df_agenceMpa = conn.query(
-        "SELECT CodA,Tel,WebSite,Street_Address,ZIP_Address,Country_Address,Name,Longitude,Latitude FROM TRAVEL_AGENCY as agence,(SELECT Longitude,Latitude,Name FROM CITY) as ville_project WHERE agence.City_Address = ville_project.Name")
+        "SELECT CodA,Tel,WebSite,CONCAT(Street_Address, ' ', ZIP_Address, '' , Country_Address,' ',Name) as Adresse_Total, Name,Longitude,Latitude FROM TRAVEL_AGENCY as agence,(SELECT Longitude,Latitude,Name FROM CITY) as ville_project WHERE agence.City_Address = ville_project.Name")
 else:
     selected = tuple(selection)
     if(len(selected) == 1):
         selected = f"('{selected[0]}')"
-        st.subheader(f"Agences de Voyage Disponibles a {selection[0]}")
+        st.subheader(f"Available Travel Agencies in {selection[0]}")
     else:
-        st.subheader(f"Agences de Voyage Disponibles a {' ,'.join(selected)}")
+        st.subheader(f"Available Travel Agencies in {' ,'.join(selected)}")
     df_agenceMpa = conn.query(
-        f"SELECT CodA,Tel,WebSite,Street_Address,ZIP_Address,Country_Address,Name,Longitude,Latitude FROM TRAVEL_AGENCY as agence,(SELECT Longitude,Latitude,Name FROM CITY) as ville_project WHERE agence.City_Address = ville_project.Name AND Name in {selected }")
+        f"SELECT CodA,Tel,WebSite,CONCAT(Street_Address, ' ', ZIP_Address, ' ', Country_Address,' ',Name) as Adresse_Total,Longitude,Latitude FROM TRAVEL_AGENCY as agence,(SELECT Longitude,Latitude,Name FROM CITY) as ville_project WHERE agence.City_Address = ville_project.Name AND Name in {selected }")
 
 
-def cardAgence(code_a,telephone,site_web,Adresse_rue_a,VILLE_nom_ville):
+def cardAgence(code_a,telephone,site_web,Adresse_Total):
     st.html("""
     <style>
         .property-card{
@@ -235,9 +234,8 @@ def cardAgence(code_a,telephone,site_web,Adresse_rue_a,VILLE_nom_ville):
           <div class="card-body">
             <h3 class="title">Code agence {code_a}</h3>
             <ul class="meta">
-              <li>📍 {Adresse_rue_a} </li>
-              <li> 📍{VILLE_nom_ville}</li>
-              <li>📞 {telephone}</li>
+              <li>📍 {Adresse_Total} </li>
+                <li>📞 {telephone}</li>
               <li>
                   <a href="{site_web}" target="_blank">{site_web}</a>
               </li>
@@ -254,7 +252,7 @@ for index, row in df_agenceMpa.iterrows():
             row["WebSite"] = ''
         else:
             row["WebSite"] = f"🌐 {row['WebSite']}"
-        cardAgence(row["CodA"], row["Tel"], row["WebSite"], row["Street_Address"], row["Name"])
+        cardAgence(row["CodA"], row["Tel"], row["WebSite"], row["Adresse_Total"])
     if i == 2:
         i = 0
     else:
@@ -275,14 +273,14 @@ for index,row in df_agenceMpa.iterrows():
         </a>
     """
     tooltip_content = f"""
-        <b>{row['Name']}</b><br>
-        <i>Agence {row['CodA']}</i>
+        <b>{row['Adresse_Total']}</b><br>
         """
     folium.Marker(
         [row["Latitude"],row["Longitude"]],
         popup=popup_content,
         tooltip=tooltip_content,
+        tiles="CartoDB positron"
     ).add_to(m)
 
 # call to render Folium map in Streamlit
-st_data = st_folium(m, width=725)
+st_data = st_folium(m,use_container_width=True)

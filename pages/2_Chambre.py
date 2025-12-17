@@ -6,7 +6,6 @@ import base64
 from headEdite import *
 
 headerEdit()
-st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded",page_icon="🏨")
 st.markdown(
     """
     <style>

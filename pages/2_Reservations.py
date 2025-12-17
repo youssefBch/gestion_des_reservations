@@ -11,7 +11,6 @@ def img_to_base64(path):
         return base64.b64encode(f.read()).decode()
 
 headerEdit()
-st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded",page_icon="🏨")
 st.markdown(
         """
         <style>
@@ -70,16 +69,16 @@ options = [
 selection = st.pills("months :", options, selection_mode="multi")
 
 if(not(selection)):
-    st.subheader("Chambre ayant le coût journalier moyen le plus élevé par mois")
+    st.subheader("Room with the Highest Average Daily Rate per Month")
     df_reservations_display = df_reservation
 else:
     selected = list(selection)
     if(len(selected) == 1):
         nombre_chambre = len(df_reservation[df_reservation['Month'] == selected[0]])
-        st.subheader(f"Chambre ayant le coût journalier moyen le plus élevé en {selection[0]} ({nombre_chambre}) :")
+        st.subheader(f"Room with the Highest Average Daily Rate per Month in {selection[0]} ({nombre_chambre}) :")
     else:
         nombre_chambre = len(df_reservation[df_reservation['Month'].isin(selected)])
-        st.subheader(f"Chambre ayant le coût journalier moyen le plus élevé en {', '.join(selected)} ({nombre_chambre}) :")
+        st.subheader(f"Room with the Highest Average Daily Rate per Month in {', '.join(selected)} ({nombre_chambre}) :")
 
     df_reservations_display = df_reservation[df_reservation['Month'].isin(selected)]
 
@@ -172,3 +171,15 @@ for index, row in df_reservations_display.iterrows():
         i = 0
     else:
         i = i + 1
+st.space(size="medium")
+
+st.subheader("Price Variation by Month")
+
+df = conn.query("SELECT DATE_FORMAT(StartDate, '%Y-%m-01') AS month, avg(Cost) as avg_cost FROM BOOKING group by month")
+df["month"] = pd.DatetimeIndex(df["month"]).strftime('%B')
+st.line_chart(
+    df,
+    x="month",
+    y="avg_cost",
+)
+

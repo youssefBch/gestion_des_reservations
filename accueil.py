@@ -10,8 +10,6 @@ from headEdite import *
 headerEdit()
 import base64
 
-st.set_page_config(page_title="Welcome To Our Reservation Website", layout="wide", initial_sidebar_state="expanded",page_icon="🏨")
-
 st.markdown(
         """
         <style>
@@ -198,7 +196,7 @@ heroSection("assets/bg1.jpg", "assets/bg2.jpg", "assets/bg3.jpg")
 
 st.space(size="medium")
 
-st.subheader("Notre hotels")
+st.subheader("Hotel Summary")
 st.space(size="small")
 
 
@@ -312,7 +310,7 @@ with col2:
 with col3:
     stasCard(nbrAumnities, "Total Amenities", "🏢")
 st.space(size="medium")
-st.subheader("Notre team")
+st.subheader("Our Team")
 st.space(size="small")
 
 
@@ -431,6 +429,8 @@ with col1:
     profilCard("Najoua", "Horma", img_to_base64("assets/66.png"), "tester")
 with col2:
     profilCard("Chaimae", "Ghonim", img_to_base64("assets/66.png"), "tester")
+with col3:
+    profilCard("Mariem", "Sidi", img_to_base64("assets/66.png"), "tester")
 
 
 
