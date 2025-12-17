@@ -409,7 +409,6 @@ def profilCard(ftname, lname, imageUrl, role):
     text-transform: capitalize;
     font-size: 20px;
     margin: 15px 0px 5px 0px;">{ftname} {lname}</h3>
-          <h4 class="title">{role}</h4>
         </div>
       </div>
     </div>

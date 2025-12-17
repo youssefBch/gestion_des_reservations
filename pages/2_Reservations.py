@@ -32,6 +32,42 @@ st.markdown(
         """,
         unsafe_allow_html=True
     )
+# if cost was per period
+df_reservation = conn.query("""
+
+SELECT 
+    m.month,
+    m.ROOM_CodR,
+    r.Floor,
+    r.SurfaceArea,
+    r.Type,
+    m.avg_daily_cost
+FROM (
+    SELECT 
+        DATE_FORMAT(b.StartDate, '%Y-%m-01') AS month,
+        b.ROOM_CodR,
+        AVG(b.Cost / DATEDIFF(b.EndDate, b.StartDate)) AS avg_daily_cost
+    FROM BOOKING b
+    GROUP BY month, b.ROOM_CodR
+) AS m
+JOIN ROOM r ON r.CodR = m.ROOM_CodR
+JOIN (
+    SELECT month, MAX(avg_daily_cost) AS max_cost
+    FROM (
+        SELECT 
+            DATE_FORMAT(b.StartDate, '%Y-%m-01') AS month,
+            b.ROOM_CodR,
+            AVG(b.Cost / DATEDIFF(b.EndDate, b.StartDate)) AS avg_daily_cost
+        FROM BOOKING b
+        GROUP BY month, b.ROOM_CodR
+    ) AS t
+    GROUP BY month
+) AS h
+ON m.month = h.month AND m.avg_daily_cost = h.max_cost
+ORDER BY m.month;
+
+""")
+# if cost was per day ( as the project says )
 df_reservation = conn.query("""
 
 SELECT 
