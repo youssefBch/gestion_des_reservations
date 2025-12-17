@@ -49,7 +49,7 @@ def heroSection(*args):
     .slideshow-container {{
         position: relative;
         width: 100%;
-        height: 100vh;
+        height: 100%;
         overflow: hidden;
         border-radius: 12px;
     }}
@@ -189,7 +189,7 @@ def heroSection(*args):
     </script>
     """
 
-    components.html(html_code, height=650)
+    components.html(html_code, height=800)
 
 
 heroSection("assets/bg1.jpg", "assets/bg2.jpg", "assets/bg3.jpg")
