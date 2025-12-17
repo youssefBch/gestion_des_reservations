@@ -4,6 +4,12 @@ import numpy as np
 from sqlalchemy import text
 from connectionDB import *
 from headEdite import *
+import base64
+
+def img_to_base64(path):
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
 headerEdit()
 st.set_page_config(page_title = "Welcome to the Booking Information Page", layout="wide", initial_sidebar_state="expanded")
 st.markdown(
@@ -90,7 +96,7 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
           transition:transform .25s ease, box-shadow .25s ease;
         }
         .property-card:hover{
-          transform:translateY(-8px);
+          transform:translateY(-1px);
           box-shadow: 0 20px 50px rgba(20,30,70,0.12);
         }
         .property-map{
@@ -103,9 +109,9 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
           padding:18px;
         }
         .card-body .title{
-              margin: 0 0 8px 0;
+            margin: 0 0 8px 0;
             font-size: 18px;
-            color: #f4f4f4 !important;
+            color: var(--muted);
         }
 
         .meta {
@@ -136,7 +142,33 @@ def cardChambre(Room_CodR, SurfaceArea, Type, Floor):
     """)
 
 
-cols = st.columns(1)
-with cols[0]:
-    for index, row in df_reservations_display.iterrows():
-            cardChambre(row["ROOM_CodR"], row["SurfaceArea"], row["Type"], row["Floor"])
+from PIL import Image
+
+for idx, row in df_reservations_display.iterrows():
+
+    col1, col2 = st.columns([1, 1])
+
+    # --- CARD COLUMN ---
+    with col1:
+        cardChambre(
+            row["ROOM_CodR"],
+            row["SurfaceArea"],
+            row["Type"],
+            row["Floor"]
+        )
+
+    # --- IMAGE COLUMN ---
+    with col2:
+        # Select image based on room type
+        if row["Type"] == "double":
+            image = Image.open("assets/bg5.jpg")
+        elif row["Type"] == "suite":
+            image = Image.open("assets/bg2.jpg")
+
+        # Display image always
+        st.image(image, width=320)
+
+        # --- ESPACE ENTRE LES LIGNES ---
+        st.markdown("<br><br>", unsafe_allow_html=True)
+
+
