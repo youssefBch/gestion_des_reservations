@@ -32,24 +32,6 @@ def img_to_base64(path):
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode()
 
-df_chambre = conn.query("""
-SELECT r.*, 
-       h.*, 
-       ha.SPACES_Space
-FROM ROOM r
-LEFT JOIN HAS_AMENITIES h ON h.ROOM_CodR = r.CodR
-LEFT JOIN HAS_SPACES ha ON ha.ROOM_CodR = r.CodR;
-""")
-
-
-# Grouper tous les équipements par chambre
-df_equipements = df_chambre.groupby('CodR')['AMENITIES_Amenity'].apply(list).reset_index()
-
-# Conserver les colonnes de surface et type_chambre
-df_chambre_unique = df_chambre.drop(columns="AMENITIES_Amenity").drop_duplicates()
-df_chambre_grouped = df_chambre_unique.merge(df_equipements, on='CodR', how='left')
-
-
 # ==============================
 # FILTRES
 # ==============================
@@ -75,23 +57,90 @@ with col3:
 # ==============================
 # APPLICATION DES FILTRES
 # ==============================
-df_filtre = df_chambre_grouped.copy()
 
+df_filtre = conn.query(f"""
+        SELECT *
+        FROM ROOM
+    """)
+
+radioSelected = ('suite','double','single')
 if type_filtre != "All":
-    df_filtre = df_filtre[df_filtre["Type"] == f"{type_filtre.lower()}"]
+    radioSelected = f"('{type_filtre.lower()}')"
+    df_filtre = conn.query(f"""
+        SELECT r.*
+        FROM ROOM r
+        WHERE r.Type IN {radioSelected};
+    """)
 
+selected = ("balcony", "jacuzzi", "minibar", "pay-tv")
 
 if options_filtre:
-    df_filtre = df_filtre[
-        df_filtre["AMENITIES_Amenity"].apply(
-            lambda x: all(opt in x for opt in options_filtre)
-        )
-    ]
+    selected = tuple(options_filtre)
+    if len(selected) == 1:
+        selected = f"('{selected[0]}')"   # avoid getting a tuple with this form (tuple_value,)
+        countSelected = 1
+    else:
+        countSelected = len(selected)
+
+    df_filtre = conn.query(f"""
+        SELECT  q1.CodR, count(q1.AMENITIES_Amenity),q1.SurfaceArea, q1.Type
+        
+        FROM( 	SELECT *
+                FROM ( SELECT r.*
+                FROM ROOM r
+                WHERE r.Type IN {radioSelected}
+                ) r1
+                JOIN HAS_AMENITIES ha ON ha.ROOM_CodR = r1.CodR
+                WHERE ha.AMENITIES_Amenity IN {selected}
+        ) q1
+        GROUP BY q1.CodR
+        HAVING count(q1.AMENITIES_Amenity) = {countSelected};
+    """)
 
 
 # Filtre cuisine
 if cuisine_filtre:
-    df_filtre = df_filtre[df_filtre["SPACES_Space"]=="kitchen"]
+    if options_filtre:
+        selected = tuple(options_filtre)
+        if len(selected) == 1:
+            selected = f"('{selected[0]}')"  # avoid getting a tuple with this form (tuple_value,)
+            countSelected = 1
+        else:
+            countSelected = len(selected)
+
+        df_filtre = conn.query(f"""
+            SELECT  q1.CodR, count(q1.AMENITIES_Amenity),q1.SurfaceArea, q1.Type
+
+            FROM( 	SELECT *
+                    FROM ( SELECT r.*
+                    FROM ROOM r
+                    WHERE r.Type IN {radioSelected}
+                    ) r1
+                    JOIN HAS_AMENITIES ha ON ha.ROOM_CodR = r1.CodR
+                    JOIN HAS_SPACES h ON h.ROOM_CodR = r1.CodR
+                    WHERE ha.AMENITIES_Amenity IN {selected}
+                    AND SPACES_Space = "kitchen"
+            ) q1
+            GROUP BY q1.CodR
+            HAVING count(q1.AMENITIES_Amenity) = {countSelected};
+        """)
+
+    else :
+        df_filtre = conn.query(f"""
+            SELECT  DISTINCT(q1.CodR),q1.SurfaceArea, q1.Type
+
+            FROM( 	SELECT *
+                    FROM ( SELECT r.*
+                    FROM ROOM r
+                    WHERE r.Type IN {radioSelected}
+                    ) r1
+                    JOIN HAS_AMENITIES ha ON ha.ROOM_CodR = r1.CodR
+                    JOIN HAS_SPACES h ON h.ROOM_CodR = r1.CodR
+                    WHERE ha.AMENITIES_Amenity IN {selected}
+                    AND SPACES_Space = "kitchen"
+            ) q1
+            
+        """)
 
 # ==============================
 # AFFICHAGE TABLE
@@ -165,7 +214,7 @@ width:100%;            height: 320px;
         }
         .card-image{
             width:100%;
-            border-radius: 15px;
+            border-radius: 5px;
         }
     </style>
     """)
