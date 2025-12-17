@@ -420,15 +420,17 @@ def profilCard(ftname, lname, imageUrl, role):
 
 col1, col2, col3, col4 = st.columns(4,gap='small')
 with col1:
-    profilCard("Youssef", "Bouchti", img_to_base64("assets/5.png"), "tester")
+    profilCard("Youssef", "Bouchti", img_to_base64("assets/12.png"), "tester")
 with col2:
-    profilCard("Amine", "El Asri", img_to_base64("assets/5.png"), "tester")
+    profilCard("Amine", "El Asri", img_to_base64("assets/12.png"), "tester")
 with col3:
-    profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
+    profilCard("Zainab", "Rezoukia", img_to_base64("assets/66.png"), "tester")
 with col4:
-    profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
+    profilCard("Badr", "El majdoub", img_to_base64("assets/12.png"), "tester")
 with col1:
-    profilCard("youssef", "bouchti", img_to_base64("assets/5.png"), "tester")
+    profilCard("Najoua", "Horma", img_to_base64("assets/66.png"), "tester")
+with col2:
+    profilCard("Chaimae", "Ghonim", img_to_base64("assets/66.png"), "tester")
 
 
 
