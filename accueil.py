@@ -189,7 +189,7 @@ def heroSection(*args):
     </script>
     """
 
-    components.html(html_code, height=800)
+    components.html(html_code, height=900)
 
 
 heroSection("assets/bg1.jpg", "assets/bg2.jpg", "assets/bg3.jpg")
